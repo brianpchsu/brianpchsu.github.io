@@ -520,18 +520,6 @@
   <div class="filter-tags" id="filter-tags" style="display:none;">
     <span class="label">快速篩選地點：</span>
     <button class="filter-tag active" data-filter="" data-filter-type="location">全部</button>
-    <button class="filter-tag" data-filter="全球|Global|Worldwide|WW|全世界|Any Office|任何辦公室" data-filter-type="location">🌍
-      全球</button>
-    <button class="filter-tag" data-filter="美國|US|USA|San Francisco|NYC|Dallas|Seattle|Austin"
-      data-filter-type="location">🇺🇸 美國</button>
-    <button class="filter-tag" data-filter="英國|UK|London|倫敦" data-filter-type="location">🇬🇧 英國</button>
-    <button class="filter-tag"
-      data-filter="歐洲|Europe|Germany|Berlin|Netherlands|Amsterdam|荷蘭|愛爾蘭|Ireland|Vienna|France|Paris"
-      data-filter-type="location">🇪🇺 歐洲</button>
-    <button class="filter-tag" data-filter="加拿大|Canada|Toronto|Vancouver" data-filter-type="location">🇨🇦 加拿大</button>
-    <button class="filter-tag" data-filter="新加坡|Singapore" data-filter-type="location">🇸🇬 新加坡</button>
-    <button class="filter-tag" data-filter="日本|Japan|Tokyo|東京" data-filter-type="location">🇯🇵 日本</button>
-    <button class="filter-tag" data-filter="APAC|亞太|台灣|Taiwan|台北" data-filter-type="location">🌏 亞太</button>
   </div>
   <div class="filter-tags" id="filter-tags-company" style="display:none;">
     <span class="label">快速篩選公司：</span>
@@ -724,15 +712,41 @@
         companyContainer.appendChild(btn);
       });
 
-      // Compute and display counts for location filter tags
-      document.querySelectorAll('#filter-tags .filter-tag').forEach(btn => {
-        const filterVal = btn.dataset.filter;
-        if (!filterVal) return; // skip "全部"
-        const keywords = filterVal.split('|').map(k => k.toLowerCase());
+      // Dynamically generate top location filter buttons
+      const regionDefinitions = [
+        { label: '美國', filter: '美國|us|usa|sjc|mtv|sea|ny', isCountry: true },
+        { label: '亞太', filter: '亞太|tw|taiwan|hk|cn|china|台灣|taipei|hsinchu', isCountry: false },
+        { label: '加拿大', filter: '加拿大|canada|vancouver|toronto', isCountry: true },
+        { label: '歐洲', filter: '歐洲|eu|europe|uk|netherlands|germany|荷蘭|德國|英國|倫敦|london|berlin|amsterdam', isCountry: false },
+        { label: '英國', filter: '英國|uk|london|倫敦', isCountry: true },
+        { label: '新加坡', filter: '新加坡|singapore|sg', isCountry: true },
+        { label: '日本', filter: '日本|japan|jp|tokyo', isCountry: true },
+        { label: '澳洲', filter: '澳洲|australia|sydney|au', isCountry: true }
+      ];
+
+      // Calculate counts
+      const regionCounts = regionDefinitions.map(region => {
+        const keywords = region.filter.split('|').map(k => k.toLowerCase());
         const count = data.filter(row =>
           row.location && keywords.some(kw => row.location.toLowerCase().includes(kw))
         ).length;
-        btn.innerHTML = btn.innerHTML + ` <small>(${count})</small>`;
+        return { ...region, count };
+      });
+
+      // Sort by count descending. If tied, '加拿大' or larger region logic is implicit since sort is stable
+      const topLocations = regionCounts
+        .filter(r => r.count > 0)
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 8); // Max 8
+
+      const locContainer = document.getElementById('filter-tags');
+      topLocations.forEach(loc => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-tag';
+        btn.dataset.filter = loc.filter;
+        btn.dataset.filterType = 'location';
+        btn.innerHTML = `${escapeHtml(loc.label)} <small>(${loc.count})</small>`;
+        locContainer.appendChild(btn);
       });
 
 

@@ -25,24 +25,6 @@
   --radius: 16px;
 }
 
-/* Dark mode */
-[data-theme="dark"] {
-  --bg-page: #1A202C;
-  --bg-card: #2D3748;
-  --text-primary: #F7FAFC;
-  --text-secondary: #CBD5E0;
-  --text-muted: #718096;
-  --accent: #63B3ED;
-  --accent-hover: #90CDF4;
-  --border: #4A5568;
-  --divider: #4A5568;
-  --btn-bg: #4299E1;
-  --btn-text: #FFFFFF;
-  --btn-hover: #63B3ED;
-  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3);
-  --shadow-btn: 0 2px 8px rgba(66, 153, 225, 0.3);
-}
-
 body {
   font-family: 'Inter', 'Noto Sans TC', system-ui, -apple-system, sans-serif;
   background: var(--bg-page);
@@ -53,7 +35,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: background 0.3s, color 0.3s;
 }
 
 a {
@@ -64,6 +45,25 @@ a {
 
 a:hover {
   color: var(--accent-hover);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── Back Link (general) ─────────────────── */
+.back-link {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: var(--accent);
 }
 
 /* ── Card Container ──────────────────────── */
@@ -83,6 +83,7 @@ a:hover {
     opacity: 0;
     transform: translateY(12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -173,32 +174,6 @@ a:hover {
 
 .link-btn svg {
   flex-shrink: 0;
-}
-
-/* ── Dark Mode Toggle ────────────────────── */
-.theme-toggle {
-  position: fixed;
-  top: 1.25rem;
-  right: 1.25rem;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  color: var(--text-muted);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  transition: all 0.2s;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  z-index: 100;
-}
-
-.theme-toggle:hover {
-  border-color: var(--accent);
-  color: var(--accent);
 }
 
 /* ── Footer ───────────────────────────────── */

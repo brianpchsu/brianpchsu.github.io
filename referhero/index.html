@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>歹晚郎內推互助網絡</title>
+  <meta name="description" content="台灣海外工作者內推互助平台，提供超過 300 家公司的內推資訊，幫助你找到理想的海外工作機會。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <!-- PapaParse -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"
+    integrity="sha384-D/t0ZMqQW31H3az8ktEiNb39wyKnS82iFY52QPACM+IjKW3jDUhyIgh2PApRqJZs"
+    crossorigin="anonymous"></script>
+  <!-- Tabulator CSS & JS -->
+  <link href="https://unpkg.com/tabulator-tables@6.3.1/dist/css/tabulator_simple.min.css" rel="stylesheet"
+    integrity="sha384-V4N7xA98XpwXEziukVT23ibnUCmr8LbIxUQpT4PSUD3yp1TgQyMvrAAelVOuO0C0" crossorigin="anonymous">
+  <script src="https://unpkg.com/tabulator-tables@6.3.1/dist/js/tabulator.min.js"
+    integrity="sha384-SKSq3cuuVWdfrjtLz9wNlqE0bMc903yMS5zGnFtwvfddplgxa1hywtiLyw1CbSHO"
+    crossorigin="anonymous"></script>
+  <style>
+    /* ── Reset & Base ─────────────────────────── */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans TC', system-ui, -apple-system, sans-serif;
+      background: #F7F9FB;
+      color: #212121;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── Hero Section ─────────────────────────── */
+    .hero {
+      text-align: center;
+      padding: 12px 1.5rem 12px;
+      background: #fff;
+      border-bottom: 1px solid #E8ECF0;
+      animation: heroFadeIn 0.8s ease-out;
+    }
+
+    @keyframes heroFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2D3748;
+      margin-bottom: 0.2rem;
+    }
+
+    .hero .subtitle {
+      font-size: 0.95rem;
+      color: #6B7B8D;
+      max-width: 600px;
+      margin: 0 auto 0.5rem;
+      animation: heroFadeIn 1s ease-out 0.2s both;
+    }
+
+
+    /* ── Quick Filter Tags ────────────────────── */
+    .filter-tags {
+      max-width: 1200px;
+      margin: 1rem auto 0;
+      padding: 0 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .filter-tags .label {
+      font-size: 0.8rem;
+      color: #6B7B8D;
+      margin-right: 0.25rem;
+    }
+
+    .filter-tag {
+      padding: 0.3rem 0.85rem;
+      border-radius: 20px;
+      border: 1px solid #D1D9E0;
+      background: #fff;
+      color: #4A5568;
+      font-size: 0.78rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-tag:hover {
+      background: #F0F4F8;
+      border-color: #A0AEC0;
+      color: #2D3748;
+    }
+
+    .filter-tag.active {
+      background: #0060B9;
+      border-color: #0060B9;
+      color: #fff;
+    }
+
+    /* ── Loading Skeleton ──────────────────────── */
+    .loading {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .skeleton-row {
+      display: flex;
+      gap: 12px;
+      padding: 16px 12px;
+      border-bottom: 1px solid #F0F0F0;
+    }
+
+    .skeleton-cell {
+      height: 14px;
+      background: linear-gradient(90deg, #EAEEF2 25%, #F4F7FA 50%, #EAEEF2 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s ease-in-out infinite;
+      border-radius: 6px;
+    }
+
+    .skeleton-cell.w1 {
+      flex: 1;
+    }
+
+    .skeleton-cell.w2 {
+      flex: 2;
+    }
+
+    .skeleton-cell.w3 {
+      flex: 2.5;
+    }
+
+    .skeleton-cell.w05 {
+      flex: 0.6;
+    }
+
+    .skeleton-header {
+      margin-bottom: 4px;
+      padding: 14px 12px;
+      background: #4C5D67;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .skeleton-header .skeleton-cell {
+      height: 12px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.08) 25%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.08) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
+      }
+
+      100% {
+        background-position: -200% 0;
+      }
+    }
+
+    .error {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #E53E3E;
+    }
+
+    /* ── Table Container ──────────────────────── */
+    .table-wrapper {
+      max-width: 1200px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+
+
+    /* ── Tabulator Theme Overrides ─────────────── */
+    .tabulator {
+      background-color: #fff !important;
+      border: 1px solid #E2E8F0 !important;
+      border-radius: 12px !important;
+      overflow: hidden;
+      font-family: 'Inter', 'Noto Sans TC', system-ui, sans-serif !important;
+      font-size: 0.85rem !important;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06) !important;
+      max-height: 75vh !important;
+    }
+
+    .tabulator .tabulator-header {
+      background: #4C5D67 !important;
+      border-bottom: none !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 10 !important;
+    }
+
+    .tabulator .tabulator-header .tabulator-col {
+      background: transparent !important;
+      border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
+      color: #fff !important;
+      font-weight: 600 !important;
+      font-size: 0.85rem !important;
+      white-space: normal !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      line-height: 1.4 !important;
+    }
+
+    .tabulator .tabulator-header .tabulator-col {
+      min-height: 60px !important;
+    }
+
+    .tabulator .tabulator-header .tabulator-col.tabulator-sortable .tabulator-col-title {
+      padding-right: 20px !important;
+    }
+
+    /* Header filter inputs */
+    .tabulator .tabulator-header .tabulator-header-filter input {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      border-radius: 6px !important;
+      color: #fff !important;
+      padding: 4px 8px !important;
+      font-size: 0.75rem !important;
+      font-family: inherit !important;
+      outline: none !important;
+    }
+
+    .tabulator .tabulator-header .tabulator-header-filter input::placeholder {
+      color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    .tabulator .tabulator-header .tabulator-header-filter input:focus {
+      border-color: rgba(255, 255, 255, 0.5) !important;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .tabulator .tabulator-header .tabulator-header-filter select {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      border-radius: 6px !important;
+      color: #fff !important;
+      padding: 4px 6px !important;
+      font-size: 0.75rem !important;
+      font-family: inherit !important;
+      outline: none !important;
+    }
+
+    /* Table rows */
+    .tabulator .tabulator-tableholder .tabulator-table .tabulator-row {
+      background-color: #fff !important;
+      border-bottom: 1px solid #F0F0F5 !important;
+      border-left: 3px solid transparent !important;
+      transition: background 0.15s ease, border-left-color 0.15s ease;
+    }
+
+    .tabulator .tabulator-tableholder .tabulator-table .tabulator-row:nth-child(even) {
+      background-color: #FAFBFC !important;
+    }
+
+    .tabulator .tabulator-tableholder .tabulator-table .tabulator-row:hover {
+      background-color: #F0F7FF !important;
+      border-left-color: #0060B9 !important;
+    }
+
+    .tabulator .tabulator-tableholder .tabulator-table .tabulator-row .tabulator-cell {
+      border-right: 1px solid #F0F0F5 !important;
+      color: #2D3748 !important;
+      padding: 12px 14px !important;
+      overflow-wrap: break-word !important;
+      word-break: break-word !important;
+      white-space: normal !important;
+    }
+
+    /* Sort arrows */
+    .tabulator .tabulator-header .tabulator-col.tabulator-sortable .tabulator-arrow {
+      border-bottom-color: #fff !important;
+    }
+
+    /* Pagination */
+    .tabulator .tabulator-footer {
+      background: #FAFBFC !important;
+      border-top: 1px solid #E2E8F0 !important;
+    }
+
+    .tabulator .tabulator-footer .tabulator-page {
+      background: #fff !important;
+      border: 1px solid #D1D9E0 !important;
+      border-radius: 6px !important;
+      color: #4A5568 !important;
+      margin: 0 2px !important;
+      padding: 4px 10px !important;
+      font-family: inherit !important;
+    }
+
+    .tabulator .tabulator-footer .tabulator-page.active {
+      background: #0060B9 !important;
+      color: #fff !important;
+      border-color: #0060B9 !important;
+    }
+
+    .tabulator .tabulator-footer .tabulator-page:hover {
+      background: #F0F4F8 !important;
+      color: #2D3748 !important;
+    }
+
+    .tabulator .tabulator-footer .tabulator-page-counter {
+      color: #6B7B8D !important;
+    }
+
+    /* Status badge */
+    .status-yes {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: #E6F9F0;
+      color: #007646;
+    }
+
+    .status-no {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: #FEF2F2;
+      color: #C53030;
+    }
+
+    /* Location pill */
+    .location-pill {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      background: #EBF5FF;
+      color: #0060B9;
+      white-space: nowrap;
+      margin: 1px 2px;
+    }
+
+    /* ── Footer ───────────────────────────────── */
+    .footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #A0AEC0;
+      font-size: 0.8rem;
+    }
+
+    /* ── Mobile Cards ─────────────────────────── */
+    .mobile-cards {
+      display: none;
+      max-width: 1200px;
+      margin: 1rem auto;
+      padding: 0 0.75rem;
+    }
+
+    .company-card {
+      background: #fff;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      transition: box-shadow 0.3s, border-color 0.3s;
+    }
+
+    .company-card:hover {
+      border-color: #CBD5E0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+
+    .card-company {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1A202C;
+    }
+
+    .card-field {
+      margin-bottom: 0.45rem;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .card-label {
+      color: #6B7B8D;
+      font-weight: 600;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      display: block;
+      margin-bottom: 0.1rem;
+    }
+
+    .card-value {
+      color: #2D3748;
+      word-break: break-word;
+    }
+
+    .card-value a {
+      color: #0060B9;
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .load-more-btn {
+      display: block;
+      width: 100%;
+      padding: 0.8rem;
+      margin: 0.5rem 0 2rem;
+      border: 1px solid #D1D9E0;
+      border-radius: 10px;
+      background: #fff;
+      color: #4A5568;
+      font-size: 0.9rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .load-more-btn:hover {
+      background: #F0F4F8;
+      color: #2D3748;
+    }
+
+    /* ── Responsive ───────────────────────────── */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 2rem 1rem 1.2rem;
+      }
+
+      .hero h1 {
+        font-size: 1.5rem;
+      }
+
+      .filter-tags {
+        gap: 0.35rem;
+      }
+
+      /* Hide Tabulator, show cards */
+      .table-wrapper {
+        display: none !important;
+      }
+
+      .mobile-cards {
+        display: block !important;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-cards {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1 id="page-title">歹晚郎內推互助網絡</h1>
+    <p class="subtitle" id="page-subtitle">載入資料中…</p>
+  </section>
+
+  <!-- Quick Filter Tags -->
+  <div class="filter-tags" id="filter-tags" style="display:none;">
+    <span class="label">快速篩選地點：</span>
+    <button class="filter-tag active" data-filter="" data-filter-type="location">全部</button>
+    <button class="filter-tag" data-filter="全球|Global|Worldwide|WW|全世界|Any Office|任何辦公室" data-filter-type="location">🌍
+      全球</button>
+    <button class="filter-tag" data-filter="美國|US|USA|San Francisco|NYC|Dallas|Seattle|Austin"
+      data-filter-type="location">🇺🇸 美國</button>
+    <button class="filter-tag" data-filter="英國|UK|London|倫敦" data-filter-type="location">🇬🇧 英國</button>
+    <button class="filter-tag"
+      data-filter="歐洲|Europe|Germany|Berlin|Netherlands|Amsterdam|荷蘭|愛爾蘭|Ireland|Vienna|France|Paris"
+      data-filter-type="location">🇪🇺 歐洲</button>
+    <button class="filter-tag" data-filter="加拿大|Canada|Toronto|Vancouver" data-filter-type="location">🇨🇦 加拿大</button>
+    <button class="filter-tag" data-filter="新加坡|Singapore" data-filter-type="location">🇸🇬 新加坡</button>
+    <button class="filter-tag" data-filter="日本|Japan|Tokyo|東京" data-filter-type="location">🇯🇵 日本</button>
+    <button class="filter-tag" data-filter="APAC|亞太|台灣|Taiwan|台北" data-filter-type="location">🌏 亞太</button>
+  </div>
+  <div class="filter-tags" id="filter-tags-company" style="display:none;">
+    <span class="label">快速篩選公司：</span>
+    <button class="filter-tag active" data-filter="" data-filter-type="company">全部</button>
+  </div>
+
+  <!-- Loading Skeleton -->
+  <div class="loading" id="loading">
+    <div class="skeleton-header">
+      <div class="skeleton-row">
+        <div class="skeleton-cell w1"></div>
+        <div class="skeleton-cell w2"></div>
+        <div class="skeleton-cell w05"></div>
+        <div class="skeleton-cell w2"></div>
+        <div class="skeleton-cell w1"></div>
+        <div class="skeleton-cell w3"></div>
+        <div class="skeleton-cell w05"></div>
+      </div>
+    </div>
+    <div class="skeleton-row">
+      <div class="skeleton-cell w1"></div>
+      <div class="skeleton-cell w2"></div>
+      <div class="skeleton-cell w05"></div>
+      <div class="skeleton-cell w2"></div>
+      <div class="skeleton-cell w1"></div>
+      <div class="skeleton-cell w3"></div>
+      <div class="skeleton-cell w05"></div>
+    </div>
+    <div class="skeleton-row">
+      <div class="skeleton-cell w1"></div>
+      <div class="skeleton-cell w2"></div>
+      <div class="skeleton-cell w05"></div>
+      <div class="skeleton-cell w2"></div>
+      <div class="skeleton-cell w1"></div>
+      <div class="skeleton-cell w3"></div>
+      <div class="skeleton-cell w05"></div>
+    </div>
+    <div class="skeleton-row">
+      <div class="skeleton-cell w1"></div>
+      <div class="skeleton-cell w2"></div>
+      <div class="skeleton-cell w05"></div>
+      <div class="skeleton-cell w2"></div>
+      <div class="skeleton-cell w1"></div>
+      <div class="skeleton-cell w3"></div>
+      <div class="skeleton-cell w05"></div>
+    </div>
+    <div class="skeleton-row">
+      <div class="skeleton-cell w1"></div>
+      <div class="skeleton-cell w2"></div>
+      <div class="skeleton-cell w05"></div>
+      <div class="skeleton-cell w2"></div>
+      <div class="skeleton-cell w1"></div>
+      <div class="skeleton-cell w3"></div>
+      <div class="skeleton-cell w05"></div>
+    </div>
+    <div class="skeleton-row">
+      <div class="skeleton-cell w1"></div>
+      <div class="skeleton-cell w2"></div>
+      <div class="skeleton-cell w05"></div>
+      <div class="skeleton-cell w2"></div>
+      <div class="skeleton-cell w1"></div>
+      <div class="skeleton-cell w3"></div>
+      <div class="skeleton-cell w05"></div>
+    </div>
+    <div class="skeleton-row">
+      <div class="skeleton-cell w1"></div>
+      <div class="skeleton-cell w2"></div>
+      <div class="skeleton-cell w05"></div>
+      <div class="skeleton-cell w2"></div>
+      <div class="skeleton-cell w1"></div>
+      <div class="skeleton-cell w3"></div>
+      <div class="skeleton-cell w05"></div>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div class="error" id="error" style="display:none;">
+    <p>⚠️ 無法載入資料，請稍後再試。</p>
+  </div>
+
+  <!-- Table (Desktop) -->
+  <div class="table-wrapper" id="table-wrapper" style="display:none;">
+    <div id="tabulator-table"></div>
+  </div>
+
+  <!-- Cards (Mobile) -->
+  <div class="mobile-cards" id="mobile-cards" style="display:none;"></div>
+
+
+  <script>
+    const _p = [
+      'aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vc3ByZWFkc2hlZXRzL2QvZS8=',
+      'MlBBQ1gtMXZUTmtuTEc4cEg1T3dlekxRMjNQbUtSSmhRcERCX0VoMkphOEtpWUhVX3h1MzZwczlRUlcxWWR4bEZhRWljMHYyODZlNzBjcG1NbEpvNDA=',
+      'L3B1Yj9vdXRwdXQ9Y3N2JmdpZD01MDQ1Mjc4NDE='
+    ];
+    const CSV_URL = _p.map(s => atob(s)).join('');
+
+    let table; // Tabulator instance
+    let allData = []; // Store all data for mobile cards
+    let filteredData = []; // Current filtered data for mobile
+    let mobilePage = 0;
+    const MOBILE_PAGE_SIZE = 20;
+
+    Papa.parse(CSV_URL, {
+      download: true,
+      skipEmptyLines: true,
+      complete: function (results) {
+        const rows = results.data;
+        if (!rows || rows.length < 3) {
+          showError();
+          return;
+        }
+
+        // Row 0 = title/prompt text, Row 1 = headers, Row 2+ = data
+        const titleRow = rows[0];
+        const headers = rows[1];
+        const dataRows = rows.slice(2);
+
+        // Set page title from Row 0
+        const titleText = titleRow[0] || '';
+        if (titleText) {
+          document.getElementById('page-subtitle').innerHTML = autoLink(titleText);
+        }
+
+        // Convert to JSON array of objects with short keys for Tabulator
+        const COL_KEYS = ['company', 'contact', 'maxJobs', 'requirements', 'location', 'notes', 'hiring'];
+        const COL_HEADERS = headers;
+
+        const jsonData = dataRows
+          .filter(row => row.some(cell => cell && cell.trim() !== ''))
+          .map(row => {
+            const obj = {};
+            COL_KEYS.forEach((key, i) => {
+              obj[key] = (row[i] || '').trim() || '-';
+            });
+            return obj;
+          });
+
+
+        // Collect unique values for dropdown filters
+        const locationValues = [...new Set(jsonData.map(d => d.location))].filter(v => v !== '-').sort();
+        const maxJobValues = [...new Set(jsonData.map(d => d.maxJobs))].filter(v => v !== '-').sort();
+        const hiringValues = [...new Set(jsonData.map(d => d.hiring))].filter(v => v !== '-').sort();
+
+        // Build Tabulator
+        initTable(jsonData, COL_HEADERS, locationValues, maxJobValues, hiringValues);
+      },
+      error: function (err) {
+        console.error('CSV 解析錯誤:', err);
+        showError();
+      }
+    });
+
+    function initTable(data, colHeaders, locationValues, maxJobValues, hiringValues) {
+      allData = data;
+      filteredData = data;
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('table-wrapper').style.display = 'block';
+      document.getElementById('mobile-cards').style.display = 'block';
+      document.getElementById('filter-tags').style.display = 'flex';
+      document.getElementById('filter-tags-company').style.display = 'flex';
+
+      // Set total count on both "全部" buttons
+      document.querySelector('#filter-tags .filter-tag[data-filter=""]').innerHTML = `全部 <small>(${data.length})</small>`;
+      document.querySelector('#filter-tags-company .filter-tag[data-filter=""]').innerHTML = `全部 <small>(${data.length})</small>`;
+
+      // Dynamically generate top 8 company filter buttons + TSMC as 9th
+      const companyCounts = {};
+      data.forEach(row => {
+        const c = (row.company || '').trim();
+        if (c && c !== '-') companyCounts[c] = (companyCounts[c] || 0) + 1;
+      });
+      const topCompanies = Object.entries(companyCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 8);
+      // Ensure TSMC is included as 9th (match TSMC or 台積電)
+      if (!topCompanies.some(([name]) => name.includes('TSMC') || name.includes('台積電'))) {
+        topCompanies.push(['TSMC', 0]); // count will be recalculated below
+      }
+      const companyContainer = document.getElementById('filter-tags-company');
+      topCompanies.forEach(([name]) => {
+        // Count using includes() to match the actual filter behavior
+        const count = data.filter(row => row.company && row.company.includes(name)).length;
+        const btn = document.createElement('button');
+        btn.className = 'filter-tag';
+        btn.dataset.filter = name;
+        btn.dataset.filterType = 'company';
+        btn.innerHTML = `${escapeHtml(name)} <small>(${count})</small>`;
+        companyContainer.appendChild(btn);
+      });
+
+      // Compute and display counts for location filter tags
+      document.querySelectorAll('#filter-tags .filter-tag').forEach(btn => {
+        const filterVal = btn.dataset.filter;
+        if (!filterVal) return; // skip "全部"
+        const keywords = filterVal.split('|').map(k => k.toLowerCase());
+        const count = data.filter(row =>
+          row.location && keywords.some(kw => row.location.toLowerCase().includes(kw))
+        ).length;
+        btn.innerHTML = btn.innerHTML + ` <small>(${count})</small>`;
+      });
+
+
+      // ── Tabulator (Desktop) ──
+      table = new Tabulator("#tabulator-table", {
+        data: data,
+        layout: "fitColumns",
+        responsiveLayout: "collapse",
+        pagination: "local",
+        paginationSize: 30,
+        paginationCounter: "rows",
+        movableColumns: false,
+        placeholder: "沒有找到符合條件的資料",
+        columns: [
+          {
+            title: colHeaders[0] || "內推的公司",
+            field: "company",
+            widthGrow: 1,
+            headerFilter: "input",
+            headerFilterPlaceholder: "搜尋公司…",
+            sorter: "string",
+            formatter: function (cell) {
+              const val = cell.getValue();
+              return val && val !== '-' ? `<strong style="color:#1A202C">${escapeHtml(val)}</strong>` : '<span style="color:#CBD5E0">-</span>';
+            }
+          },
+          {
+            title: colHeaders[1] || "接受內推方式",
+            field: "contact",
+            widthGrow: 2,
+            formatter: function (cell) {
+              return autoLink(cell.getValue());
+            }
+          },
+          {
+            title: colHeaders[2] || "最多職缺數",
+            field: "maxJobs",
+            widthGrow: 0.6,
+            sorter: "string",
+            hozAlign: "center"
+          },
+          {
+            title: colHeaders[3] || "需要提供的資料",
+            field: "requirements",
+            widthGrow: 2,
+            formatter: "textarea"
+          },
+          {
+            title: colHeaders[4] || "接受地點",
+            field: "location",
+            widthGrow: 1,
+            sorter: "string",
+            formatter: function (cell) {
+              return formatLocationPills(cell.getValue());
+            }
+          },
+          {
+            title: colHeaders[5] || "備註",
+            field: "notes",
+            widthGrow: 2.5,
+            formatter: "textarea"
+          },
+          {
+            title: colHeaders[6] || "正常招人",
+            field: "hiring",
+            widthGrow: 0.8,
+            headerFilter: "list",
+            headerFilterParams: { values: { "": "全部", "Yes (持續招人）": "✓ Yes", "No (暫停招募）": "✗ No" } },
+            headerFilterPlaceholder: "全部",
+            sorter: "string",
+            hozAlign: "center",
+            formatter: function (cell) {
+              const val = cell.getValue();
+              if (val && val.includes('Yes')) return '<span class="status-yes">✓ 持續招人</span>';
+              if (val && val.includes('No')) return '<span class="status-no">✗ 暫停招募</span>';
+              return val && val !== '-' ? escapeHtml(val) : '<span style="color:#CBD5E0">-</span>';
+            }
+          }
+        ],
+
+      });
+
+      // ── Mobile Cards ──
+      renderMobileCards();
+
+
+      // ── Quick filter tags (location) ──
+      document.querySelectorAll('#filter-tags .filter-tag').forEach(btn => {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('#filter-tags .filter-tag').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          applyActiveTagFilter();
+        });
+      });
+
+      // ── Quick filter tags (company) ──
+      document.querySelectorAll('#filter-tags-company .filter-tag').forEach(btn => {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('#filter-tags-company .filter-tag').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          applyActiveTagFilter();
+        });
+      });
+    }
+
+    function applyActiveTagFilter() {
+      // Check location filter
+      const activeLocTag = document.querySelector('#filter-tags .filter-tag.active');
+      const locVal = activeLocTag ? activeLocTag.dataset.filter : '';
+      // Check company filter
+      const activeCompTag = document.querySelector('#filter-tags-company .filter-tag.active');
+      const compVal = activeCompTag ? activeCompTag.dataset.filter : '';
+
+      if (!locVal && !compVal) {
+        table.clearFilter();
+        filteredData = allData;
+      } else {
+        const matchFn = (rowData) => {
+          // Location match (if active)
+          let locMatch = true;
+          if (locVal) {
+            const keywords = locVal.split('|').map(k => k.toLowerCase());
+            locMatch = rowData.location && keywords.some(kw => rowData.location.toLowerCase().includes(kw));
+          }
+          // Company match (if active)
+          let compMatch = true;
+          if (compVal) {
+            compMatch = rowData.company && rowData.company.includes(compVal);
+          }
+          return locMatch && compMatch;
+        };
+        table.setFilter(matchFn);
+        filteredData = allData.filter(matchFn);
+      }
+      mobilePage = 0;
+      renderMobileCards();
+    }
+
+    function renderMobileCards() {
+      const container = document.getElementById('mobile-cards');
+      const end = (mobilePage + 1) * MOBILE_PAGE_SIZE;
+      const visibleData = filteredData.slice(0, end);
+
+      let html = '';
+      visibleData.forEach(row => {
+        const hiringBadge = row.hiring && row.hiring.includes('Yes')
+          ? '<span class="status-yes">✓ 持續招人</span>'
+          : row.hiring && row.hiring.includes('No')
+            ? '<span class="status-no">✗ 暫停招募</span>'
+            : '';
+
+        html += `<div class="company-card">`;
+        html += `<div class="card-header">`;
+        html += `<span class="card-company">${escapeHtml(row.company)}</span>`;
+        html += hiringBadge;
+        html += `</div>`;
+
+        if (row.contact && row.contact !== '-') {
+          html += `<div class="card-field"><span class="card-label">聯絡方式</span><span class="card-value">${autoLink(row.contact)}</span></div>`;
+        }
+        if (row.location && row.location !== '-') {
+          html += `<div class="card-field"><span class="card-label">接受地點</span><span class="card-value">${formatLocationPills(row.location)}</span></div>`;
+        }
+        if (row.maxJobs && row.maxJobs !== '-') {
+          html += `<div class="card-field"><span class="card-label">最多職缺數</span><span class="card-value">${escapeHtml(row.maxJobs)}</span></div>`;
+        }
+        if (row.requirements && row.requirements !== '-') {
+          html += `<div class="card-field"><span class="card-label">需要提供的資料</span><span class="card-value">${escapeHtml(row.requirements)}</span></div>`;
+        }
+        if (row.notes && row.notes !== '-') {
+          html += `<div class="card-field"><span class="card-label">備註</span><span class="card-value">${autoLink(row.notes)}</span></div>`;
+        }
+
+        html += `</div>`;
+      });
+
+      if (end < filteredData.length) {
+        html += `<button class="load-more-btn" onclick="loadMoreCards()">載入更多（還有 ${filteredData.length - end} 家）</button>`;
+      }
+
+      container.innerHTML = html;
+
+    }
+
+    function loadMoreCards() {
+      mobilePage++;
+      renderMobileCards();
+    }
+
+    function autoLink(text) {
+      if (!text || text === '-') return '<span style="color:#CBD5E0">-</span>';
+      const escaped = escapeHtml(text);
+      const urlRegex = /(https?:\/\/[^\s,\n<]+)/g;
+      let result = escaped.replace(urlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#0060B9;text-decoration:none;word-break:break-all;">$1</a>');
+      const emailRegex = /([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/g;
+      result = result.replace(emailRegex, '<a href="mailto:$1" style="color:#0060B9;text-decoration:none;">$1</a>');
+      return result;
+    }
+
+    function formatLocationPills(text) {
+      if (!text || text === '-') return '<span style="color:#CBD5E0">-</span>';
+      // Split by common delimiters
+      const parts = text.split(/[,、;；\/]+/).map(s => s.trim()).filter(Boolean);
+      if (parts.length <= 1) return `<span class="location-pill">${escapeHtml(text)}</span>`;
+      return parts.map(p => `<span class="location-pill">${escapeHtml(p)}</span>`).join(' ');
+    }
+
+    const _escapeMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>"']/g, c => _escapeMap[c]);
+    }
+
+    function showError() {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').style.display = 'block';
+    }
+  </script>
+
+  <footer class="footer">
+    <p>歹晚郎內推互助網絡 · 資料來源為社群各路大神幫忙 · 請求協助時請保持禮貌專業</p>
+    <p style="margin-top:0.4rem;">© 2026 歹晚郎內推互助網絡</p>
+  </footer>
+</body>
+
+</html>

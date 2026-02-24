@@ -612,11 +612,11 @@
   <script>
     const _p = [
       'aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vc3ByZWFk',
-      'c2hlZXRzL2QvZS8yUEFDWC0xdlROa25MRzhwSDVP',
-      'd2V6TFEyM1BtS1JKaFFwREJfRWgySmE4S2lZSFVf',
-      'eHUzNnBzOVFSVzFZZHhsRmFFaWMwdjI4NmU3MGNw',
-      'bU1sSm80MC9wdWI/Z2lkPTcyODg3ODgxMyZzaW5n',
-      'bGU9dHJ1ZSZvdXRwdXQ9Y3N2'
+      'c2hlZXRzL2QvZS8yUEFDWC0xdlFWWTUyOXpORWNk',
+      'X2hwYjJyZE1URTRSLV8zTFg0RC10OXlYTXlvM1Bj',
+      'ZEJ5eUZqZk1yazQ0MzhXci1QeXlob1FpUWhQc0Zn',
+      'RkdoQTRVdS9wdWI/Z2lkPTAmc2luZ2xlPXRydWUm',
+      'b3V0cHV0PWNzdg=='
     ];
     const CSV_URL = _p.map(s => atob(s)).join('');
 
@@ -641,8 +641,8 @@
         const headers = rows[1];
         const dataRows = rows.slice(2);
 
-        // Set page title from Row 0
-        const titleText = titleRow[0] || '';
+        // Set page title from Row 0 (shifted to index 1 by Timestamp column)
+        const titleText = titleRow[1] || titleRow[0] || '';
         if (titleText) {
           document.getElementById('page-subtitle').innerHTML = autoLink(titleText);
         }

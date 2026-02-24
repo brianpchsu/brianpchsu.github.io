@@ -611,9 +611,12 @@
 
   <script>
     const _p = [
-      'aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vc3ByZWFkc2hlZXRzL2QvZS8=',
-      'MlBBQ1gtMXZUTmtuTEc4cEg1T3dlekxRMjNQbUtSSmhRcERCX0VoMkphOEtpWUhVX3h1MzZwczlRUlcxWWR4bEZhRWljMHYyODZlNzBjcG1NbEpvNDA=',
-      'L3B1Yj9vdXRwdXQ9Y3N2JmdpZD01MDQ1Mjc4NDE='
+      'aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vc3ByZWFk',
+      'c2hlZXRzL2QvZS8yUEFDWC0xdlROa25MRzhwSDVP',
+      'd2V6TFEyM1BtS1JKaFFwREJfRWgySmE4S2lZSFVf',
+      'eHUzNnBzOVFSVzFZZHhsRmFFaWMwdjI4NmU3MGNw',
+      'bU1sSm80MC9wdWI/Z2lkPTcyODg3ODgxMyZzaW5n',
+      'bGU9dHJ1ZSZvdXRwdXQ9Y3N2'
     ];
     const CSV_URL = _p.map(s => atob(s)).join('');
 
@@ -645,7 +648,7 @@
         }
 
         // Convert to JSON array of objects with short keys for Tabulator
-        const COL_KEYS = ['company', 'contact', 'maxJobs', 'requirements', 'location', 'notes', 'hiring'];
+        const COL_KEYS = ['timestamp', 'company', 'contact', 'maxJobs', 'requirements', 'location', 'notes', 'hiring'];
         const COL_HEADERS = headers;
 
         const jsonData = dataRows
@@ -762,7 +765,7 @@
         placeholder: "沒有找到符合條件的資料",
         columns: [
           {
-            title: colHeaders[0] || "內推的公司",
+            title: colHeaders[1] || "內推的公司",
             field: "company",
             widthGrow: 1,
             headerFilter: "input",
@@ -774,7 +777,7 @@
             }
           },
           {
-            title: colHeaders[1] || "接受內推方式",
+            title: colHeaders[2] || "接受內推方式",
             field: "contact",
             widthGrow: 2,
             formatter: function (cell) {
@@ -782,20 +785,20 @@
             }
           },
           {
-            title: colHeaders[2] || "最多職缺數",
+            title: colHeaders[3] || "最多職缺數",
             field: "maxJobs",
             widthGrow: 0.6,
             sorter: "string",
             hozAlign: "center"
           },
           {
-            title: colHeaders[3] || "需要提供的資料",
+            title: colHeaders[4] || "需要提供的資料",
             field: "requirements",
             widthGrow: 2,
             formatter: "textarea"
           },
           {
-            title: colHeaders[4] || "接受地點",
+            title: colHeaders[5] || "接受地點",
             field: "location",
             widthGrow: 1,
             sorter: "string",
@@ -804,13 +807,13 @@
             }
           },
           {
-            title: colHeaders[5] || "備註",
+            title: colHeaders[6] || "備註",
             field: "notes",
             widthGrow: 2.5,
             formatter: "textarea"
           },
           {
-            title: colHeaders[6] || "正常招人",
+            title: colHeaders[7] || "正常招人",
             field: "hiring",
             widthGrow: 0.8,
             headerFilter: "list",
@@ -823,6 +826,29 @@
               if (val && val.includes('Yes')) return '<span class="status-yes">✓ 持續招人</span>';
               if (val && val.includes('No')) return '<span class="status-no">✗ 暫停招募</span>';
               return val && val !== '-' ? escapeHtml(val) : '<span style="color:#CBD5E0">-</span>';
+            }
+          },
+          {
+            title: "最後更新時間",
+            field: "timestamp",
+            widthGrow: 0.9,
+            hozAlign: "center",
+            sorter: function (a, b) {
+              // Custom sorter for raw "M/D/YYYY HH:mm:ss" strings
+              const dateA = new Date(a).getTime() || 0;
+              const dateB = new Date(b).getTime() || 0;
+              return dateA - dateB;
+            },
+            formatter: function (cell) {
+              const val = cell.getValue();
+              if (!val || val === '-') return '<span style="color:#CBD5E0">-</span>';
+              // Format "2/23/2026 14:18:12" to "2026-02-23"
+              const d = new Date(val);
+              if (isNaN(d.getTime())) return escapeHtml(val);
+              const yyyy = d.getFullYear();
+              const mm = String(d.getMonth() + 1).padStart(2, '0');
+              const dd = String(d.getDate()).padStart(2, '0');
+              return `<span style="color:#6B7B8D;font-size:0.8rem;">${yyyy}-${mm}-${dd}</span>`;
             }
           }
         ],
@@ -918,6 +944,11 @@
         }
         if (row.notes && row.notes !== '-') {
           html += `<div class="card-field"><span class="card-label">備註</span><span class="card-value">${autoLink(row.notes)}</span></div>`;
+        }
+        if (row.timestamp && row.timestamp !== '-') {
+          const d = new Date(row.timestamp);
+          const displayDate = isNaN(d.getTime()) ? escapeHtml(row.timestamp) : `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+          html += `<div class="card-field" style="margin-top: 0.8rem; border-top: 1px dashed #E2E8F0; padding-top: 0.5rem;"><span class="card-label">最後更新</span><span class="card-value" style="color:#6B7B8D; font-size: 0.8rem;">${displayDate}</span></div>`;
         }
 
         html += `</div>`;

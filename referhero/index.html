@@ -690,23 +690,22 @@
       document.querySelector('#filter-tags .filter-tag[data-filter=""]').innerHTML = `全部 <small>(${data.length})</small>`;
       document.querySelector('#filter-tags-company .filter-tag[data-filter=""]').innerHTML = `全部 <small>(${data.length})</small>`;
 
-      // Dynamically generate top 8 company filter buttons + TSMC as 9th
-      const companyCounts = {};
+      // Dynamically generate top company filter buttons (up to 9, grouped by first word, sorted by count descending)
+      const companyGroupCounts = {};
       data.forEach(row => {
         const c = (row.company || '').trim();
-        if (c && c !== '-') companyCounts[c] = (companyCounts[c] || 0) + 1;
+        if (c && c !== '-') {
+          const firstWord = c.split(/[\s\/,]+/)[0];
+          companyGroupCounts[firstWord] = (companyGroupCounts[firstWord] || 0) + 1;
+        }
       });
-      const topCompanies = Object.entries(companyCounts)
+      const topCompanies = Object.entries(companyGroupCounts)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 8);
-      // Ensure TSMC is included as 9th (match TSMC or 台積電)
-      if (!topCompanies.some(([name]) => name.includes('TSMC') || name.includes('台積電'))) {
-        topCompanies.push(['TSMC', 0]); // count will be recalculated below
-      }
+        .filter(([, count]) => count > 0)
+        .slice(0, 9);
+
       const companyContainer = document.getElementById('filter-tags-company');
-      topCompanies.forEach(([name]) => {
-        // Count using includes() to match the actual filter behavior
-        const count = data.filter(row => row.company && row.company.includes(name)).length;
+      topCompanies.forEach(([name, count]) => {
         const btn = document.createElement('button');
         btn.className = 'filter-tag';
         btn.dataset.filter = name;

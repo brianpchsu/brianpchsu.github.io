@@ -8,19 +8,9 @@ lang: zh
     <h1 class="blog-page-title">部落格</h1>
 
     {% assign posts = site.posts | where: "lang", "zh" %}
-    {% assign featured = posts | where: "featured", true %}
-    {% if featured.size > 0 %}
-    <h2 class="featured-heading">精選文章</h2>
-    {% for post in featured %}
-    {% include post-card.html post=post featured=true %}
-    {% endfor %}
-    {% endif %}
-
     {% if posts.size > 0 %}
     {% for post in posts %}
-    {% unless post.featured %}
     {% include post-card.html post=post %}
-    {% endunless %}
     {% endfor %}
     {% else %}
     <p class="empty-note">尚未發布任何文章，敬請期待！🚀</p>

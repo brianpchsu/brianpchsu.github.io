@@ -1,9 +1,10 @@
 {% assign p = include.post %}
 {% assign card_lang = p.lang | default: "en" %}
-<a href="{{ p.url }}" class="blog-card{% if include.featured %} blog-card-featured{% endif %}">
+<a href="{{ p.url }}" class="blog-card{% if p.featured %} blog-card-featured{% endif %}">
     <span class="blog-card-title">{{ p.title }}</span>
     <span class="post-meta">
         <time datetime="{{ p.date | date_to_xmlschema }}">{{ p.date | date: "%B %d, %Y" }}</time>
+        {% if p.featured %}<span class="tag-chip">{% if card_lang == "zh" %}★ 精選{% else %}★ Featured{% endif %}</span>{% endif %}
         {% assign read_chars = p.content | strip_html | size %}
         {% assign read_min = read_chars | divided_by: 500 %}
         {% if read_min < 1 %}{% assign read_min = 1 %}{% endif %}

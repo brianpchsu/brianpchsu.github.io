@@ -1,0 +1,23 @@
+{% assign p = include.post %}
+{% assign card_lang = p.lang | default: "en" %}
+<a href="{{ p.url }}" class="blog-card{% if include.featured %} blog-card-featured{% endif %}">
+    <span class="blog-card-title">{{ p.title }}</span>
+    <span class="post-meta">
+        <time datetime="{{ p.date | date_to_xmlschema }}">{{ p.date | date: "%B %d, %Y" }}</time>
+        {% assign read_chars = p.content | strip_html | size %}
+        {% assign read_min = read_chars | divided_by: 500 %}
+        {% if read_min < 1 %}{% assign read_min = 1 %}{% endif %}
+        <span>· {% if card_lang == "zh" %}約 {{ read_min }} 分鐘{% else %}{{ read_min }} min read{% endif %}</span>
+        {% if p.topics %}
+        <span class="post-tags">
+            {% for topic in p.topics %}
+            {% assign label = site.data.topics[topic][card_lang] | default: topic %}
+            <span class="tag-chip">{{ label }}</span>
+            {% endfor %}
+        </span>
+        {% endif %}
+    </span>
+    {% if p.excerpt %}
+    <span class="blog-card-excerpt">{{ p.excerpt | strip_html | truncate: 160 }}</span>
+    {% endif %}
+</a>

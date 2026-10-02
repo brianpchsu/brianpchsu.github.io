@@ -2,16 +2,76 @@
 layout: default
 ---
 
+{% assign post_lang = page.lang | default: "en" %}
+{% assign lang_posts = site.posts | where: "lang", post_lang %}
+{% for p in lang_posts %}
+  {% if p.url == page.url %}
+    {% assign idx = forloop.index0 %}
+    {% assign idx_prev = idx | minus: 1 %}
+    {% assign idx_next = idx | plus: 1 %}
+  {% endif %}
+{% endfor %}
+{% if idx_prev >= 0 %}{% assign newer_post = lang_posts[idx_prev] %}{% endif %}
+{% if idx_next < lang_posts.size %}{% assign older_post = lang_posts[idx_next] %}{% endif %}
+{% if page.translation_ref %}
+  {% assign translations = site.posts | where: "translation_ref", page.translation_ref %}
+  {% for t in translations %}
+    {% if t.url != page.url %}{% assign translation = t %}{% endif %}
+  {% endfor %}
+{% endif %}
+
 <article class="post-page">
-    {% if page.lang == "zh" %}
+    {% if post_lang == "zh" %}
     <a href="/zh/blog/" class="back-link">← 回到部落格</a>
     {% else %}
     <a href="/blog/" class="back-link">← Back to Blog</a>
     {% endif %}
     <h1>{{ page.title }}</h1>
-    <time class="post-date" datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y"
-        }}</time>
+    <div class="post-meta">
+        <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time>
+        {% assign read_chars = content | strip_html | size %}
+        {% assign read_min = read_chars | divided_by: 500 %}
+        {% if read_min < 1 %}{% assign read_min = 1 %}{% endif %}
+        <span>· {% if post_lang == "zh" %}約 {{ read_min }} 分鐘{% else %}{{ read_min }} min read{% endif %}</span>
+        {% if page.topics %}
+        <span class="post-tags">
+            {% for topic in page.topics %}
+            {% assign label = site.data.topics[topic][post_lang] | default: topic %}
+            <span class="tag-chip">{{ label }}</span>
+            {% endfor %}
+        </span>
+        {% endif %}
+    </div>
     <div class="post-content">
         {{ content }}
     </div>
+
+    {% if translation %}
+    <a href="{{ translation.url }}" class="translation-link">
+        {% if post_lang == "zh" %}Read in English →{% else %}閱讀中文版 →{% endif %}
+    </a>
+    {% endif %}
+
+    {% include author-box.html %}
+
+    {% if newer_post or older_post %}
+    <nav class="prev-next" aria-label="More posts">
+        {% if older_post %}
+        <a href="{{ older_post.url }}">
+            <span class="pn-label">{% if post_lang == "zh" %}← 上一篇{% else %}← Older{% endif %}</span>
+            {{ older_post.title }}
+        </a>
+        {% else %}
+        <span class="pn-spacer"></span>
+        {% endif %}
+        {% if newer_post %}
+        <a href="{{ newer_post.url }}" class="pn-next">
+            <span class="pn-label">{% if post_lang == "zh" %}下一篇 →{% else %}Newer →{% endif %}</span>
+            {{ newer_post.title }}
+        </a>
+        {% else %}
+        <span class="pn-spacer"></span>
+        {% endif %}
+    </nav>
+    {% endif %}
 </article>

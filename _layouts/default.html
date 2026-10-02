@@ -1,43 +1,16 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="{% if page.lang == 'zh' %}zh-Hant{% else %}en{% endif %}">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if page.title %}{{ page.title }} - {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
-    <meta name="description" content="{{ page.description | default: site.description }}">
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👋</text></svg>">
-    <link rel="canonical" href="{{ site.url }}{{ page.url }}">
-    <meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
-    <meta property="og:description" content="{{ page.description | default: site.description }}">
-    <meta property="og:url" content="{{ site.url }}{{ page.url }}">
-    <meta property="og:type" content="website">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/main.css">
-    {% seo %}
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0B15S3V2YH"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-0B15S3V2YH');
-    </script>
+    {% include head.html %}
 </head>
 
 <body>
+    {% include header.html %}
+
     {{ content }}
 
-    <footer class="footer">
-        <p>👋 Thanks for visiting!</p>
-    </footer>
+    {% include footer.html %}
 </body>
 
 </html>

@@ -1,5 +1,6 @@
 title: Brian Hsu
-description: Software Engineer · Personal Website
+description: Staff Software Engineer in Silicon Valley — career, AI engineering, and community.
+lang: en
 url: "https://brianhsu.dev"
 baseurl: ""
 
@@ -27,7 +28,10 @@ defaults:
       type: "posts"
     values:
       layout: "post"
+      lang: "en"
 
 # Plugins (GitHub Pages supported)
 plugins:
   - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed

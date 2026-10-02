@@ -1,13 +1,13 @@
 ---
 layout: default
-title: Blog
-lang: en
+title: 部落格
+lang: zh
 ---
 
 <div class="container">
-    <h1 style="font-size:2rem;font-weight:700;margin-bottom:1.5rem;">Blog</h1>
+    <h1 style="font-size:2rem;font-weight:700;margin-bottom:1.5rem;">部落格</h1>
 
-    {% assign posts = site.posts | where: "lang", "en" %}
+    {% assign posts = site.posts | where: "lang", "zh" %}
     {% if posts.size > 0 %}
     <ul class="blog-list">
         {% for post in posts %}
@@ -21,6 +21,6 @@ lang: en
         {% endfor %}
     </ul>
     {% else %}
-    <p style="color:#6B7B8D;">No posts yet — coming soon. 🚀</p>
+    <p style="color:#6B7B8D;">尚未發布任何文章，敬請期待！🚀</p>
     {% endif %}
 </div>

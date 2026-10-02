@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "歡迎來到這個部落格"
-date: 2026-10-02
+date: 2026-01-01
 description: "這個部落格會寫什麼、為什麼要把文章從社群搬回自己的站，以及中英文兩邊的關係。"
 lang: zh
 permalink: /zh/blog/welcome/

@@ -23,24 +23,26 @@ Even without a traditional computer science degree, I received many interview op
 
 Below I have organized my preparation into several posts. These are my takeaways from job hunting as a Full Stack Software Engineer (a web front-end and back-end software engineer).
 
-1. Programming Languages: Which One Should You Learn? I Want to Join Google, but I Never Learned OOO. Will They Accept My XXX Language Background?
+1. [Programming Languages: Which One Should You Learn? I Want to Join Google, but I Never Learned OOO. Will They Accept My XXX Language Background?](/blog/which-programming-language-to-learn/)
 2. [An Introduction to the US Software Engineer Interview Process](/blog/software-engineer-interview-process/)
 3. [Waiting to Be Discovered: How Can Recruiters and Headhunters Find Me? How Do I Stand Out? Does LinkedIn Matter?](/blog/get-discovered-on-linkedin/)
-4. Going on the Offensive: I Am Job Hunting Now. What Do People in the US Use to Find Jobs? Which Sites and Platforms Give Me the Most Interview Opportunities?
+4. [Going on the Offensive: I Am Job Hunting Now. What Do People in the US Use to Find Jobs? Which Sites and Platforms Give Me the Most Interview Opportunities?](/blog/job-hunting-platforms/)
 5. [Software Engineer Interview Preparation: What Should You Practice? How Do You Balance Job Hunting and Practice Time?](/blog/interview-preparation/)
-6. Heard You Have Been Grinding Problems Lately: The Data Structures and Algorithms Gauntlet Every Software Engineer Interview Will Throw at You (Plus a LeetCode Discount)
+6. [Heard You Have Been Grinding Problems Lately: The Data Structures and Algorithms Gauntlet Every Software Engineer Interview Will Throw at You](/blog/data-structures-and-algorithms/)
 7. [You Got the Offer: What Should You Watch Out For? Can You Negotiate for More Salary, Stock, or Vacation?](/blog/got-the-offer-what-next/)
-8. Silicon Valley Job Hunting FAQ
+8. [Silicon Valley Job Hunting FAQ](https://web.archive.org/web/2/https://brianhsublog.blogspot.com/2015/11/faq.html) (not yet republished; link goes to the archived original)
 9. [Interview Skills and Takeaways: How to Persuade Your Interviewer in an Organized Way](/blog/interview-storytelling/)
-10. How Do You Get a Job at a US Tech Company?
-11. How Do You Write an English Resume? What Do US Tech Companies Care About?
+10. [How Do You Get a Job at a US Tech Company?](/blog/how-to-get-a-tech-job-in-the-us/)
+11. [How Do You Write an English Resume? What Do US Tech Companies Care About?](https://web.archive.org/web/20221107084348/https://brianhsublog.blogspot.com/2019/02/HowToWriteAGoodResume.html) (not yet republished; link goes to the archived original)
 12. [The Most Effective Way to Get an Interview: Internal Referrals, Finding Referral Resources, and the Taiwanese Mutual-Help Network](/blog/internal-referral-network/)
 13. [What If Money Comes Up in an Interview? How to Handle the Expected Salary Question](/blog/salary-expectation/)
 14. [You Got an Offer. How Do You Negotiate the Salary? The Sandwich Communication Method and Negotiation Moves Before You Sign](/blog/negotiating-your-offer/)
 
 I decided to write this series because the photo I posted on Facebook from my Google interview got a huge response, and many friends who were switching careers or about to head to Silicon Valley asked me how I prepared. In the past, advice and help from mentors and friends made my own road much smoother. Now I want to give something back, and I hope my experience can help software engineers who want to come to Silicon Valley or the United States.
 
-Next post: Programming Languages: Which One Should You Learn? I Want to Join Google, but I Never Learned OOO. Will They Accept My XXX Language Background?
+Next post: [Programming Languages: Which One Should You Learn? I Want to Join Google, but I Never Learned OOO. Will They Accept My XXX Language Background?](/blog/which-programming-language-to-learn/)
+
+(The full series guide: [Silicon Valley Job Hunting Series: The Complete Guide](/blog/job-hunting-guide/))
 
 ---
 

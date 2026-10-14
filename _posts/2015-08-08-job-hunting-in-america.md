@@ -23,24 +23,26 @@ translation_ref: job-hunting-in-america
 
 以下我分為幾個篇章把我的準備和大家分享，這是我 Full Stack Software Engineer （網頁前後端軟體工程師）找工作經驗的心得。
 
-1. 程式語言- 到底學哪個好？我想進Google，我沒學OOO，他們會接受我XXX語言背景嘛？
+1. [程式語言- 到底學哪個好？我想進Google，我沒學OOO，他們會接受我XXX語言背景嘛？](/zh/blog/which-programming-language-to-learn/)
 2. [簡介美國軟體工程師面試流程](/zh/blog/software-engineer-interview-process/)
 3. [等待機緣- 我要如何被人資或獵人頭發現? 我要如何脫穎而出? LinkedIn重要嘛？](/zh/blog/get-discovered-on-linkedin/)
-4. 主動出擊- 我要找工作了，現在美國都用什麼找工作？哪個網站平台能讓我有較多面試機會？
+4. [主動出擊- 我要找工作了，現在美國都用什麼找工作？哪個網站平台能讓我有較多面試機會？](/zh/blog/job-hunting-platforms/)
 5. [軟體工程師面試準備- 面試要練習什麼？ 找工作和練習的時間要如何平衡拿捏？](/zh/blog/interview-preparation/)
-6. 聽說你最近在刷題- 軟體工程師的面試一定會遇到的資料結構及演算法關卡 (& 分享 LeetCode 折扣）
+6. [聽說你最近在刷題- 軟體工程師的面試一定會遇到的資料結構及演算法關卡](/zh/blog/data-structures-and-algorithms/)
 7. [被錄取了- 我該注意什麼，我可以談判要求多一點薪水、股票或假期嘛？](/zh/blog/got-the-offer-what-next/)
-8. 矽谷找工作之常見問題 FAQ
+8. [矽谷找工作之常見問題 FAQ](https://web.archive.org/web/2/https://brianhsublog.blogspot.com/2015/11/faq.html)（尚未復刻，先連舊文備份）
 9. [面試技巧及心得，如何有條理的說服面試官？](/zh/blog/interview-storytelling/)
-10. 如何到美國科技公司工作？
-11. 英文履歷怎麼寫？ 美國科技公司注重什麼？
+10. [如何到美國科技公司工作？](/zh/blog/how-to-get-a-tech-job-in-the-us/)
+11. [英文履歷怎麼寫？ 美國科技公司注重什麼？](https://web.archive.org/web/20221107084348/https://brianhsublog.blogspot.com/2019/02/HowToWriteAGoodResume.html)（尚未復刻，先連舊文備份）
 12. [最有效得到面試的方式- 內部推薦: 尋找內推資源 & 歹晚郎互助網絡](/zh/blog/internal-referral-network/)
 13. [面試中談到錢怎麼辦？ 問到你期望薪水如何接招?](/zh/blog/salary-expectation/)
 14. [面試得到 Offer 薪水如何談？ 三明治溝通法及最後簽約前的談判招式](/zh/blog/negotiating-your-offer/)
 
 會想寫這個系列是因為我 Facebook 放上我去 Google 面試的照片得到廣大迴響，也有許多朋友想轉換或是正要向矽谷發展問我準備心得，以前得到前輩及朋友們的建議、幫忙讓我走的路稍微平順一些，現在想回饋社會，希望我的經驗可以幫助到想到矽谷或是美國的軟體工程師朋友們。
 
-下篇：程式語言- 到底學哪個好？我想進Google，我沒學OOO，他們會接受我XXX語言背景嘛？
+下篇：[程式語言- 到底學哪個好？我想進Google，我沒學OOO，他們會接受我XXX語言背景嘛？](/zh/blog/which-programming-language-to-learn/)
+
+（全系列導覽：[矽谷找工作系列總覽](/zh/blog/job-hunting-guide/)）
 
 ---
 
